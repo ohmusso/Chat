@@ -15,6 +15,7 @@ public class ChatUI : MonoBehaviour
     [SerializeField] InputField chatInputField;
     [SerializeField] GameObject chatNodePrefab;
     [SerializeField] GameObject content;
+    [SerializeField] GameObject home;
 
     public void OnClickMineButton()
     {
@@ -24,6 +25,12 @@ public class ChatUI : MonoBehaviour
     public void OnClickOhtersButton()
     {
         CreateChatNode(ChatRoll.OTHERS);
+    }
+
+    public void OnClickHomeButton()
+    {
+        this.gameObject.SetActive(false);
+        home.SetActive(true);
     }
 
     public void CreateChatNode(ChatRoll roll)

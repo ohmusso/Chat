@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Board : MonoBehaviour
+public class Home : MonoBehaviour
 {
+    [SerializeField] GameObject chatUI;
     [SerializeField] GameObject entryPrefab;
     [SerializeField] GameObject content;
     private List<GameObject> Entries;
@@ -36,6 +37,8 @@ public class Board : MonoBehaviour
     public void OnClickEntry(int id)
     {
         Debug.Log("Entry: " + id);
+        this.gameObject.SetActive(false);
+        chatUI.SetActive(true);
     }
 }
 
