@@ -230,6 +230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chatBoard: {fileID: 3115083592426727036}
+  chatName: {fileID: 2449769216444635588}
   chatText: {fileID: 3115083591773827909}
   canvasGroup: {fileID: 1860264460359558649}
 --- !u!1 &3115083591773827911

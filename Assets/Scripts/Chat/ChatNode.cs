@@ -8,6 +8,7 @@ namespace Chat
     {
         private ChatData chatData;
         [SerializeField]  Image chatBoard;
+        [SerializeField]  Text chatName;
         [SerializeField]  Text chatText;
         [SerializeField] CanvasGroup canvasGroup;
         private Vector2 areaSize;
@@ -15,6 +16,8 @@ namespace Chat
         public void Init(ChatData data)
         {
             chatData = data;
+            chatName.text = chatData.id.ToString();
+            chatText.text = chatData.body;
             StartCoroutine(InitTransform());
         }
 

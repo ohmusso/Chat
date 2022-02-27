@@ -36,13 +36,18 @@ namespace Chat
 
         void Start()
         {
-            StartCoroutine(Test());
+//            StartCoroutine(Test());
         }
 
         public void OnClickHomeButton()
         {
             this.gameObject.SetActive(false);
             home.SetActive(true);
+        }
+
+        public void OnClickSendButton()
+        {
+            CreateChatNode(ChatRoll.MINE);
         }
 
         public void CreateChatNode(ChatRoll roll)
