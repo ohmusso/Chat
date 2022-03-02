@@ -1,7 +1,7 @@
 using System;
 using MagicOnion;
 using MagicOnion.Server;
-using GrpcShared;
+using Chat.Shared.Services;
 
 namespace GrpcServer.Services
 {

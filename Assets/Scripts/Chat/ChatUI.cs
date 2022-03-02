@@ -13,63 +13,56 @@ namespace Chat
 
    public class ChatData
     {
-        public int id;
         public ChatRoll roll;
+        public string name;
         public string body;
 
-        public ChatData(int id, ChatRoll roll, string body)
+        public ChatData(ChatRoll roll, string name, string body)
         {
-            this.id = id;
             this.roll = roll;
+            this.name = name;
             this.body = body;
         }
     }
 
-    public class ChatUI : MonoBehaviour
+    public partial class ChatUI : MonoBehaviour
     {
-        private int id = 0;
         [SerializeField] InputField chatInputField;
         [SerializeField] GameObject chatNodePrefab;
         [SerializeField] GameObject chatArea;
         [SerializeField] GameObject home;
         private Vector2 areaSize;
+        private string userName;
 
         void Start()
         {
 //            StartCoroutine(Test());
         }
 
-        public void OnClickHomeButton()
+        public async void OnClickHomeButton()
         {
+            await LeaveChatRoom();
             this.gameObject.SetActive(false);
             home.SetActive(true);
         }
 
         public void OnClickSendButton()
         {
-            CreateChatNode(ChatRoll.MINE);
-        }
-
-        public void CreateChatNode(ChatRoll roll)
-        {
-            id++;
             string str = chatInputField.text;
             chatInputField.text = "";
-            ChatData data = new ChatData(id, roll, str);
+
+            ChatSendMessage(str);
+        }
+
+        public void CreateChatNode(ChatRoll roll, string name, string str)
+        {
+            ChatData data = new ChatData(roll, name, str);
 
             // Create ChatNode
             var chatNode = Instantiate<GameObject>(chatNodePrefab, chatArea.transform, false);
             chatNode.GetComponent<ChatNode>().Init(data);
 
-            Debug.Log("id:" + data.id + " roll: " + roll.ToString() + " body: " + str);
-        }
-
-        private IEnumerator Test()
-        {
-            for(int i = 0; i < 10; i++){
-                yield return new WaitForSeconds(1);
-                CreateChatNode(ChatRoll.MINE);
-            }
+            Debug.Log("roll:" + roll.ToString() + " name: " + name + " body: " + str);
         }
     }
 }

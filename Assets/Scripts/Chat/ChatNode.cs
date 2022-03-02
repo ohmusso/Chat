@@ -16,7 +16,7 @@ namespace Chat
         public void Init(ChatData data)
         {
             chatData = data;
-            chatName.text = chatData.id.ToString();
+            chatName.text = chatData.name;
             chatText.text = chatData.body;
             StartCoroutine(InitTransform());
         }
