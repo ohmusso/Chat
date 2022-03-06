@@ -39,9 +39,9 @@ namespace Chat
 //            StartCoroutine(Test());
         }
 
-        public async void OnClickHomeButton()
+        public void OnClickHomeButton()
         {
-            await LeaveChatRoom();
+            LeaveChatRoom();
             this.gameObject.SetActive(false);
             home.SetActive(true);
         }

@@ -33,7 +33,7 @@ namespace Chat
             await _channel.ShutdownAsync();
         }
 
-        public async Task LeaveChatRoom()
+        public async void LeaveChatRoom()
         {
             await this._chatHub.LeaveAsync();
         }
