@@ -21,7 +21,7 @@ namespace Chat
         async void Awake()
         {
             _isJoin = false;
-            _channel = new Channel("localhost", 5000, ChannelCredentials.Insecure);
+            _channel = new Channel("testmagiconion.centralus.azurecontainer.io", 80, ChannelCredentials.Insecure);
             _chatHub = StreamingHubClient.Connect<IChatHub, IChatHubReceiver>(_channel, this);
             userName = Random.value.ToString();
             JoinOrLeave();
