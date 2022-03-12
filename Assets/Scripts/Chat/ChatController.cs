@@ -4,6 +4,8 @@ using Chat.Shared.Services;
 using Chat.Shared.Hubs;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Chat
@@ -11,6 +13,8 @@ namespace Chat
     public partial class ChatUI : MonoBehaviour, IChatHubReceiver
     {
         private Channel _channel;
+        private CancellationTokenSource shutdownCancellation = new CancellationTokenSource();
+
         private IMyFirstService _service;
         private IChatHub _chatHub;
         private bool _isJoin; 
@@ -20,17 +24,46 @@ namespace Chat
 
         async void Awake()
         {
-            _isJoin = false;
-            _channel = new Channel("testmagiconion.centralus.azurecontainer.io", 80, ChannelCredentials.Insecure);
-            _chatHub = StreamingHubClient.Connect<IChatHub, IChatHubReceiver>(_channel, this);
-            userName = Random.value.ToString();
-            JoinOrLeave();
+//            _isJoin = false;
+//            _channel = new Channel("testmagiconion.centralus.azurecontainer.io", 80, ChannelCredentials.Insecure);
+//            _channel = new Channel("localhost", 5000, ChannelCredentials.Insecure);
+//            userName = UnityEngine.Random.value.ToString();
+//            JoinOrLeave();
         }
+
+        private async Task ConnectMagicOnionServer(string server_name, int server_port)
+        {
+            _channel = new Channel(server_name, server_port, ChannelCredentials.Insecure);
+            while (!shutdownCancellation.IsCancellationRequested)
+            {
+                try
+                {
+                    CreateChatNode(ChatRoll.SYSTEM, "System", "connecting to server...");
+                    Debug.Log($"connecting to server...");
+                    _chatHub = await StreamingHubClient.ConnectAsync<IChatHub, IChatHubReceiver>(_channel, this, cancellationToken: shutdownCancellation.Token);
+                    Debug.Log($"Connection is established.");
+                    break;
+                }
+                catch (Exception e)
+                {
+                    CreateChatNode(ChatRoll.SYSTEM, "System", $"error: {e.Message.ToString()}");
+                    Debug.LogError(e);
+                }
+
+                Debug.Log($"Failed to connect to server. Retry after 5 secconds...");
+                await Task.Delay(5000);
+            }
+
+            userName = UnityEngine.Random.value.ToString();
+            JoinOrLeave();
+        } 
 
         async void OnDestroy()
         {
-            await _chatHub.DisposeAsync();
-            await _channel.ShutdownAsync();
+            // Clean up Hub and channel
+            shutdownCancellation.Cancel();
+            await _chatHub?.DisposeAsync();
+            await _channel?.ShutdownAsync();
         }
 
         public async void LeaveChatRoom()

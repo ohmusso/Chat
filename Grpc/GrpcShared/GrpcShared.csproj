@@ -1,16 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <Compile Include="..\..\Assets\Scripts\Chat\Shared\*.cs" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MagicOnion.Abstractions" Version="4.4.0" />
+    <PackageReference Include="MagicOnion.MSBuild.Tasks" Version="4.4.0" PrivateAssets="All" />
+    <PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.1.152" PrivateAssets="All" />
     <PackageReference Include="MessagePack.UnityShims" Version="2.3.85" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Assets\Scripts\Chat\Shared\*.cs" />
+  </ItemGroup>
+
+  <Target Name="GenerateMessagePack" AfterTargets="Compile">
+    <MessagePackGenerator Input=".\GrpcShared.csproj" Output="..\..\Assets\Scripts\Chat\Generated\MessagePack.Generated.cs" />
+  </Target>
+  <Target Name="GenerateMagicOnion" AfterTargets="Compile">
+    <MagicOnionGenerator Input=".\GrpcShared.csproj" Output="..\..\Assets\Scripts\Chat\Generated\MagicOnion.Generated.cs" />
+  </Target>
 
 </Project>
