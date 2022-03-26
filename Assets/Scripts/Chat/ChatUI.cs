@@ -31,6 +31,7 @@ namespace Chat
     {
         [SerializeField] InputField chatInputField;
         [SerializeField] InputField chatServerName;
+        [SerializeField] Dropdown chatDropDownServerName;
         [SerializeField] InputField chatServerPort;
         [SerializeField] GameObject chatNodePrefab;
         [SerializeField] GameObject chatArea;
@@ -43,6 +44,11 @@ namespace Chat
 //            StartCoroutine(Test());
         }
 
+        public void OnClickQuitButton()
+        {
+            UnityEngine.Application.Quit();
+        }
+
         public void OnClickHomeButton()
         {
             LeaveChatRoom();
@@ -52,7 +58,7 @@ namespace Chat
 
         public async void OnConnectButton()
         {
-            string serverName = (chatServerName.text == "") ? "localhost" : chatServerName.text;
+            string serverName = (chatDropDownServerName.captionText.text == "") ? "localhost" : chatDropDownServerName.captionText.text;
             string serverPort = (chatServerPort.text == "") ? "5000" : chatServerPort.text;
             await ConnectMagicOnionServer(serverName, Int32.Parse(serverPort));
         }

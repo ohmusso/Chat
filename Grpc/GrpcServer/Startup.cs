@@ -7,17 +7,40 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using Azure.Data.Tables;
+using GrpcServer.Interfaces;
+using GrpcServer.TableStorage;
+
 
 namespace GrpcServer
 {
     public class Startup
     {
+        private IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
-            services.AddMagicOnion();
+            services.AddSingleton<ITableStorage<TableEntityChatData>>(serviceProvider => {
+                var storageConfig = Configuration.GetSection("AzureStorageConfig");
+                var serviceClient = new TableServiceClient(storageConfig["ConnectionString"]);
+                return new AzureTable<TableEntityChatData>(serviceClient, storageConfig);
+             }).AddMagicOnion();
+
+            // Azure Table<Fishinglog> Service
+            // services.AddSingleton<ITableStorage<TableEntityChatData>>(serviceProvider => {
+            //     var storageConfig = Configuration.GetSection("AzureStorageConfig");
+            //     var serviceClient = new TableServiceClient(storageConfig["ConnectionString"]);
+            //     return new AzureTable<TableEntityChatData>(serviceClient, storageConfig);
+            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

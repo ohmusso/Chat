@@ -129,11 +129,23 @@ namespace Chat.Shared.Services {
     {
         static readonly Method<byte[], byte[]> SumAsyncMethod;
         static readonly Func<RequestContext, ResponseContext> SumAsyncDelegate;
+        static readonly Method<byte[], byte[]> TestStorageAddMethod;
+        static readonly Func<RequestContext, ResponseContext> TestStorageAddDelegate;
+        static readonly Method<byte[], byte[]> TestStorageDeleteMethod;
+        static readonly Func<RequestContext, ResponseContext> TestStorageDeleteDelegate;
+        static readonly Method<byte[], byte[]> TestStorageQueryMethod;
+        static readonly Func<RequestContext, ResponseContext> TestStorageQueryDelegate;
 
         static MyFirstServiceClient()
         {
             SumAsyncMethod = new Method<byte[], byte[]>(MethodType.Unary, "IMyFirstService", "SumAsync", MagicOnionMarshallers.ThroughMarshaller, MagicOnionMarshallers.ThroughMarshaller);
             SumAsyncDelegate = _SumAsync;
+            TestStorageAddMethod = new Method<byte[], byte[]>(MethodType.Unary, "IMyFirstService", "TestStorageAdd", MagicOnionMarshallers.ThroughMarshaller, MagicOnionMarshallers.ThroughMarshaller);
+            TestStorageAddDelegate = _TestStorageAdd;
+            TestStorageDeleteMethod = new Method<byte[], byte[]>(MethodType.Unary, "IMyFirstService", "TestStorageDelete", MagicOnionMarshallers.ThroughMarshaller, MagicOnionMarshallers.ThroughMarshaller);
+            TestStorageDeleteDelegate = _TestStorageDelete;
+            TestStorageQueryMethod = new Method<byte[], byte[]>(MethodType.Unary, "IMyFirstService", "TestStorageQuery", MagicOnionMarshallers.ThroughMarshaller, MagicOnionMarshallers.ThroughMarshaller);
+            TestStorageQueryDelegate = _TestStorageQuery;
         }
 
         MyFirstServiceClient()
@@ -189,6 +201,33 @@ namespace Chat.Shared.Services {
         public global::MagicOnion.UnaryResult<int> SumAsync(int x, int y)
         {
             return InvokeAsync<DynamicArgumentTuple<int, int>, int>("IMyFirstService/SumAsync", new DynamicArgumentTuple<int, int>(x, y), SumAsyncDelegate);
+        }
+        static ResponseContext _TestStorageAdd(RequestContext __context)
+        {
+            return CreateResponseContext<DynamicArgumentTuple<string, string>, int>(__context, TestStorageAddMethod);
+        }
+
+        public global::MagicOnion.UnaryResult<int> TestStorageAdd(string table, string data)
+        {
+            return InvokeAsync<DynamicArgumentTuple<string, string>, int>("IMyFirstService/TestStorageAdd", new DynamicArgumentTuple<string, string>(table, data), TestStorageAddDelegate);
+        }
+        static ResponseContext _TestStorageDelete(RequestContext __context)
+        {
+            return CreateResponseContext<DynamicArgumentTuple<string, string>, int>(__context, TestStorageDeleteMethod);
+        }
+
+        public global::MagicOnion.UnaryResult<int> TestStorageDelete(string table, string data)
+        {
+            return InvokeAsync<DynamicArgumentTuple<string, string>, int>("IMyFirstService/TestStorageDelete", new DynamicArgumentTuple<string, string>(table, data), TestStorageDeleteDelegate);
+        }
+        static ResponseContext _TestStorageQuery(RequestContext __context)
+        {
+            return CreateResponseContext<DynamicArgumentTuple<string, string>, int>(__context, TestStorageQueryMethod);
+        }
+
+        public global::MagicOnion.UnaryResult<int> TestStorageQuery(string table, string data)
+        {
+            return InvokeAsync<DynamicArgumentTuple<string, string>, int>("IMyFirstService/TestStorageQuery", new DynamicArgumentTuple<string, string>(table, data), TestStorageQueryDelegate);
         }
     }
 }

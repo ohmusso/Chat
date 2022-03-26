@@ -8,5 +8,8 @@ namespace Chat.Shared.Services
     {
         // The return type must be `UnaryResult<T>`.
         UnaryResult<int> SumAsync(int x, int y);
+        UnaryResult<int> TestStorageAdd(string table, string data);
+        UnaryResult<int> TestStorageDelete(string table, string data);
+        UnaryResult<int> TestStorageQuery(string table, string data);
     }
 }
