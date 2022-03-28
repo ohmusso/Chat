@@ -8,7 +8,22 @@ public class InputLocation : MonoBehaviour
 {
     [SerializeField] InputField inputLatitude;
     [SerializeField] InputField inputLongitude;
+    [SerializeField] GameObject mapControllerObject;
+    [SerializeField] GameObject staticMap;
+    private StaticMapController mapController;
     public LocationInfo info { get; private set; }
+
+    private void Start()
+    {
+        mapController = mapControllerObject.GetComponent<StaticMapController>();
+        mapController.update += UpdateMap;
+    }
+
+    private void UpdateMap()
+    {
+        Debug.Log("invoke update map");
+        staticMap.GetComponent<Image>().sprite = Sprite.Create(mapController.tex, new Rect(0f, 0f, mapController.tex.width, mapController.tex.height), new Vector2(0.5f, 0.5f));
+    }
 
     public void OnClickGetLocationButton()
     {
@@ -24,8 +39,10 @@ public class InputLocation : MonoBehaviour
             Debug.Log("location service not enable");
 #if UNITY_ANDROID
             Permission.RequestUserPermission(Permission.FineLocation);
-#else
 #endif // UNITY_ANDROID
+#if UNITY_EDITOR
+        StartCoroutine(mapController.getStaticMap());
+#endif
             yield break;
         }
 
@@ -65,5 +82,7 @@ public class InputLocation : MonoBehaviour
 
         // Stops the location service if there is no need to query location updates continuously.
         Input.location.Stop();
+
+        StartCoroutine(mapController.getStaticMap());
     }
 }
